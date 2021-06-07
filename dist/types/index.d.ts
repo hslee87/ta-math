@@ -96,6 +96,7 @@ export default class TA extends CLookup {
         minus: any[];
     };
     vwap(): any[];
+    vwma(window?: number): any[];
     williams(window?: number): any[];
     zigzag(percent?: number): {
         time: number[];
@@ -169,6 +170,7 @@ export default class TA extends CLookup {
         minus: any[];
     };
     static vwap($high: Array<number>, $low: Array<number>, $close: Array<number>, $volume: Array<number>): any[];
+    static vwma($high: Array<number>, $low: Array<number>, $close: Array<number>, $volume: Array<number>, window?: number): any[];
     static williams($high: Array<number>, $low: Array<number>, $close: Array<number>, window?: number): any[];
     static zigzag($time: Array<number>, $high: Array<number>, $low: Array<number>, percent?: number): {
         time: number[];

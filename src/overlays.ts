@@ -1,4 +1,4 @@
-import { sma, ema, stdev, expdev, pointwise, atr, typicalPrice} from './core';
+import { sma, ema, stdev, rolling, expdev, pointwise, atr, typicalPrice} from './core';
 
 /* overlays */
 
@@ -83,6 +83,14 @@ export function vwap($high: Array<number>, $low: Array<number>, $close: Array<nu
     cumulV[i] = cumulV[i - 1] + $volume[i];
   }
   return pointwise((a: number, b: number) => a / b, cumulVTP, cumulV)
+}
+
+export function vwma($high: Array<number>, $low: Array<number>, $close: Array<number>, $volume: Array<number>, window: number) {
+    let tp = typicalPrice($high, $low, $close);
+    let tpv = pointwise((a: number, b: number) => a * b, tp, $volume)
+    let cumulTPV = rolling((s: Array<number>) => s.reduce((sum: number, x: number) => {return sum + x}, 0), tpv, window);
+    let cumulV = rolling((s: Array<number>) => s.reduce((sum: number, x: number) => {return sum + x}, 0), $volume, window);
+    return pointwise((a: number, b: number) => a / b, cumulTPV, cumulV)
 }
 
 export function zigzag($time: Array<number>, $high: Array<number>, $low: Array<number>, percent: number) {

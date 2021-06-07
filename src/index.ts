@@ -111,6 +111,8 @@ export default class TA extends CLookup {
     return TA.vi(this.$high, this.$low, this.$close, window) }
   vwap() {
     return TA.vwap(this.$high, this.$low, this.$close, this.$volume) }
+  vwma(window = 14) {
+    return TA.vwma(this.$high, this.$low, this.$close, this.$volume, window) }
   williams(window = 14) {
     return TA.williams(this.$high, this.$low, this.$close, window) }
   zigzag(percent = 15) {
@@ -175,6 +177,8 @@ export default class TA extends CLookup {
     return indicators.vi($high, $low, $close, window) }
   static vwap($high: Array<number>, $low: Array<number>, $close: Array<number>, $volume: Array<number>) {
     return overlays.vwap($high, $low, $close, $volume) }
+  static vwma($high: Array<number>, $low: Array<number>, $close: Array<number>, $volume: Array<number>, window = 14) {
+    return overlays.vwma($high, $low, $close, $volume, window) }
   static williams($high: Array<number>, $low: Array<number>, $close: Array<number>, window = 14) {
     return indicators.williams($high, $low, $close, window) }
   static zigzag($time: Array<number>, $high: Array<number>, $low: Array<number>, percent = 15) {

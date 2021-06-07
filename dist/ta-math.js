@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.TA = factory());
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.TA = factory());
 }(this, (function () { 'use strict';
 
   function mean(series) {
@@ -168,6 +168,13 @@
           cumulV[i] = cumulV[i - 1] + $volume[i];
       }
       return pointwise((a, b) => a / b, cumulVTP, cumulV);
+  }
+  function vwma($high, $low, $close, $volume, window) {
+      let tp = typicalPrice($high, $low, $close);
+      let tpv = pointwise((a, b) => a * b, tp, $volume);
+      let cumulTPV = rolling((s) => s.reduce((sum, x) => { return sum + x; }, 0), tpv, window);
+      let cumulV = rolling((s) => s.reduce((sum, x) => { return sum + x; }, 0), $volume, window);
+      return pointwise((a, b) => a / b, cumulTPV, cumulV);
   }
   function zigzag($time, $high, $low, percent) {
       let lowest = $low[0], thattime = $time[0], isUp = false;
@@ -484,6 +491,9 @@
       vwap() {
           return TA.vwap(this.$high, this.$low, this.$close, this.$volume);
       }
+      vwma(window = 14) {
+          return TA.vwma(this.$high, this.$low, this.$close, this.$volume, window);
+      }
       williams(window = 14) {
           return TA.williams(this.$high, this.$low, this.$close, window);
       }
@@ -576,6 +586,9 @@
       }
       static vwap($high, $low, $close, $volume) {
           return vwap($high, $low, $close, $volume);
+      }
+      static vwma($high, $low, $close, $volume, window = 14) {
+          return vwma($high, $low, $close, $volume, window);
       }
       static williams($high, $low, $close, window = 14) {
           return williams($high, $low, $close, window);
